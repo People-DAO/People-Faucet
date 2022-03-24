@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+
 pragma solidity ^0.8.4;
 
 //import Open Zepplins ERC-20 contract
@@ -23,7 +25,7 @@ contract Faucet is Ownable {
     //allow users to call the requestTokens function to transfer tokens
     function requestTokens () external {
         require(requestedAddress[_msgSender()] == false, "Can't Request Multiple Times!");
-        IERC20 token = IERC(tokenContract);
+        IERC20 token = IERC20(tokenContract);
         require(token.balanceOf(address(this)) >= amountAllowed, "Faucet Empty!");
 
         token.transfer(_msgSender(), amountAllowed); // transfer token
@@ -52,7 +54,7 @@ contract Faucet is Ownable {
         address payable owner = payable(owner());
         uint256 amount = address(this).balance;
         owner.transfer(amount);
-        emit WithdrawETH(_msgSender, amount);
+        emit WithdrawETH(_msgSender(), amount);
     }
 
 

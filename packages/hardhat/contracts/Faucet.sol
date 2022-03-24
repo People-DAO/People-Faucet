@@ -4,8 +4,8 @@ pragma solidity ^0.8.4;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-//create a sample token that inherits Open Zepplins ERC-20 contract
-contract Faucet {
+//create a ERC20 faucet contract
+contract Faucet is Ownable {
 
     uint256 public amountAllowed = 100 * 10 ** 18;
     address public tokenContract;
@@ -16,11 +16,15 @@ contract Faucet {
     }
 
     event SendToken(address indexed Receiver, uint256 indexed Amount); 
+    event WithdrawToken(address indexed sender, address indexed TokenContract, uint256 indexed Amount); 
+    event WithdrawETH(address indexed sender, uint256 indexed Amount); 
+
+
     //allow users to call the requestTokens function to transfer tokens
     function requestTokens () external {
         require(requestedAddress[_msgSender()] == false, "Can't Request Multiple Times!");
         IERC20 token = IERC(tokenContract);
-        require(token.balanceOf(address(this)) > amountAllowed, "Faucet Empty!");
+        require(token.balanceOf(address(this)) >= amountAllowed, "Faucet Empty!");
 
         token.transfer(_msgSender(), amountAllowed); // transfer token
         requestedAddress[_msgSender()] = true; // record requested 
@@ -33,8 +37,7 @@ contract Faucet {
         amountAllowed = _amount;
     }
 
-    event WithdrawToken(address indexed sender, address indexed TokenContract, uint256 indexed Amount); 
-    // withdraw token: LINK (only owner)
+    // withdraw token
     function withdrawToken(address _tokenContract, uint256 _amount) public onlyOwner {
         IERC20 token = IERC20(_tokenContract);
         
@@ -44,8 +47,7 @@ contract Faucet {
         emit WithdrawToken(_msgSender(), _tokenContract, _amount);
     }
 
-    event WithdrawETH(address indexed sender, uint256 indexed Amount); 
-    // withdraw token: LINK (only owner)
+    // withdraw ETH
     function withdrawETH() public onlyOwner {
         address payable owner = payable(owner());
         uint256 amount = address(this).balance;

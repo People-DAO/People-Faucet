@@ -17,6 +17,7 @@ const { Step } = Steps;
 
 const web3Modal = Web3ModalSetup();
 const USE_BURNER_WALLET = true;
+
 const USE_NETWORK_SELECTOR = false;
 
 const steps = [

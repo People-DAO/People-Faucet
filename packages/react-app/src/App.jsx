@@ -1,3 +1,4 @@
+import Web3 from 'web3';
 import { Button, Col, Row } from "antd";
 import "antd/dist/antd.css";
 import {
@@ -23,10 +24,11 @@ import { NETWORKS, ALCHEMY_KEY } from "./constants";
 import externalContracts from "./contracts/external_contracts";
 // contracts
 import deployedContracts from "./contracts/hardhat_contracts.json";
-import { Transactor, Web3ModalSetup } from "./helpers";
+import { Transactor, Web3ModalSetup, FaucetHelper } from "./helpers";
 import { Home } from "./views";
 import { useStaticJsonRPC } from "./hooks";
 const { ethers } = require("ethers");
+
 /*
     Welcome to 🏗 scaffold-eth !
 
@@ -72,6 +74,22 @@ function App(props) {
   const [injectedProvider, setInjectedProvider] = useState();
   const [address, setAddress] = useState();
   const [selectedNetwork, setSelectedNetwork] = useState(networkOptions[0]);
+
+  window.addEventListener('load', function () {
+    console.log('addEventListener load');
+    var web3 = new Web3('wss://rinkeby.infura.io/ws/v3/3f99dbedb75345d2bbce395de75823b9');
+    // 检查web3是否已经注入到(Mist/MetaMask)
+    if (typeof web3 !== 'undefined') {
+      // 使用 Mist/MetaMask 的提供者
+      web3 = new Web3(web3.currentProvider);
+    } else {
+      // 处理用户没安装的情况， 比如显示一个消息
+      // 告诉他们要安装 MetaMask 来使用我们的应用
+    }
+  
+    // 现在你可以启动你的应用并自由访问 Web3.js:
+    FaucetHelper.startApp();
+  })
 
 
   const targetNetwork = NETWORKS[selectedNetwork];

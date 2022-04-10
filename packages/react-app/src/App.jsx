@@ -52,7 +52,7 @@ const { ethers } = require("ethers");
 const initialNetwork = NETWORKS.localhost; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
 
 // 😬 Sorry for all the console logging
-const DEBUG = true;
+const DEBUG = false;
 const NETWORKCHECK = true;
 const USE_BURNER_WALLET = true; // toggle burner wallet feature
 const USE_NETWORK_SELECTOR = false;
@@ -75,22 +75,28 @@ function App(props) {
   const [address, setAddress] = useState();
   const [selectedNetwork, setSelectedNetwork] = useState(networkOptions[0]);
 
-  window.addEventListener('load', function () {
-    console.log('addEventListener load');
-    var web3 = new Web3('wss://rinkeby.infura.io/ws/v3/3f99dbedb75345d2bbce395de75823b9');
-    // 检查web3是否已经注入到(Mist/MetaMask)
-    if (typeof web3 !== 'undefined') {
-      // 使用 Mist/MetaMask 的提供者
-      web3 = new Web3(web3.currentProvider);
-    } else {
-      // 处理用户没安装的情况， 比如显示一个消息
-      // 告诉他们要安装 MetaMask 来使用我们的应用
-    }
-  
-    // 现在你可以启动你的应用并自由访问 Web3.js:
-    FaucetHelper.startApp();
-  })
-
+  if (!window.onload) {
+    window.addEventListener('load', function () {
+      console.log('addEventListener load');
+      var web3 = new Web3('wss://rinkeby.infura.io/ws/v3/3f99dbedb75345d2bbce395de75823b9');
+      // 检查web3是否已经注入到(Mist/MetaMask)
+      if (typeof web3 !== 'undefined') {
+        // 使用 Mist/MetaMask 的提供者
+        web3 = new Web3(web3.currentProvider);
+      } else {
+        // 处理用户没安装的情况， 比如显示一个消息
+        // 告诉他们要安装 MetaMask 来使用我们的应用
+      }
+    
+      // 现在你可以启动你的应用并自由访问 Web3.js:
+      web3.eth.getAccounts().then(account => {
+        FaucetHelper.startApp(web3, account);
+        console.log('account: ', account);
+        console.log('---------------------------requestTokens---------------------------' + account);
+        FaucetHelper.requestTokens(account);
+      });
+    })
+  }
 
   const targetNetwork = NETWORKS[selectedNetwork];
 

@@ -26,7 +26,6 @@ import deployedContracts from "./contracts/hardhat_contracts.json";
 import { Transactor, Web3ModalSetup } from "./helpers";
 import { Home } from "./views";
 import { useStaticJsonRPC } from "./hooks";
-
 const { ethers } = require("ethers");
 /*
     Welcome to 🏗 scaffold-eth !
@@ -73,6 +72,7 @@ function App(props) {
   const [injectedProvider, setInjectedProvider] = useState();
   const [address, setAddress] = useState();
   const [selectedNetwork, setSelectedNetwork] = useState(networkOptions[0]);
+
 
   const targetNetwork = NETWORKS[selectedNetwork];
 

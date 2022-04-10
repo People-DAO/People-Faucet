@@ -3,7 +3,7 @@ import {
   useOnBlock,
   useUserProviderAndSigner,
 } from "eth-hooks";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useImperativeHandle } from "react";
 import SelectInput from "./SelectInput";
 import UserList from "./UserList";
 import { Steps, Button, message } from "antd";
@@ -54,7 +54,7 @@ const initialNetwork = NETWORKS.localhost; // <------- select your target fronte
  * @param {*} readContracts contracts from current chain already pre-loaded using ethers contract module. More here https://docs.ethers.io/v5/api/contract/contract/
  * @returns react component
  **/
-function Home({ yourLocalBalance, readContracts }) {
+function Home({ yourLocalBalance, readContracts, childrenRef }) {
   // you can also use hooks locally in your component of choice
   // in this case, let's keep track of 'purpose' variable from our contract
   const networkOptions = [initialNetwork.name, "mainnet", "rinkeby"];
@@ -65,6 +65,12 @@ function Home({ yourLocalBalance, readContracts }) {
   const [selectedNetwork, setSelectedNetwork] = useState(networkOptions[0]);
   const mainnetProvider = useStaticJsonRPC(providers);
   const targetNetwork = NETWORKS[selectedNetwork];
+
+  useImperativeHandle(childrenRef, () => ({
+    goNext: () => {
+      doStep();
+    }
+  }))
 
 
   // 🔭 block explorer URL
@@ -168,33 +174,12 @@ function Home({ yourLocalBalance, readContracts }) {
     switch (current) {
       case 0:
         return (
-          <div style={{ display: "flex", flex: 1, alignItems: "center", justifyContent: "space-around" }}>
-          {USE_NETWORK_SELECTOR && (
-            <div style={{ marginRight: 20 }}>
-              <NetworkSwitch
-                networkOptions={networkOptions}
-                selectedNetwork={selectedNetwork}
-                setSelectedNetwork={setSelectedNetwork}
-              />
-            </div>
-          )}
-          <Account
-            useBurner={USE_BURNER_WALLET}
-            minimized={true}
-            address={address}
-            localProvider={localProvider}
-            userSigner={userSigner}
-            mainnetProvider={mainnetProvider}
-            price={price}
-            web3Modal={web3Modal}
-            loadWeb3Modal={loadWeb3Modal}
-            logoutOfWeb3Modal={logoutOfWeb3Modal}
-            blockExplorer={blockExplorer}
-          />
-        </div>
+          <h1>Please Connect Your Wallet</h1>
         );
       case 1:
-        return <></>;
+        return (
+          <Button type="primary" onClick={doStep}>Tweet Request</Button>
+        );
       case 2:
         return (
           <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>

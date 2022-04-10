@@ -31,7 +31,7 @@ import deployedContracts from "./contracts/hardhat_contracts.json";
 import { Transactor, Web3ModalSetup } from "./helpers";
 import { Home, ExampleUI, Hints, Subgraph } from "./views";
 import { useStaticJsonRPC } from "./hooks";
-
+const Web3 = require('web3')
 const { ethers } = require("ethers");
 /*
     Welcome to 🏗 scaffold-eth !
@@ -79,6 +79,7 @@ function App(props) {
   const [address, setAddress] = useState();
   const [selectedNetwork, setSelectedNetwork] = useState(networkOptions[0]);
   const location = useLocation();
+
 
   const targetNetwork = NETWORKS[selectedNetwork];
 
@@ -213,6 +214,12 @@ function App(props) {
     localChainId,
     myMainnetDAIBalance,
   ]);
+
+  test();
+  function test() { 
+    console.info('test ran');
+  }
+
 
   const loadWeb3Modal = useCallback(async () => {
     const provider = await web3Modal.connect();

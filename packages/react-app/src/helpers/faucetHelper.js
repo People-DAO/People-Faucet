@@ -4,7 +4,7 @@ const externalContractsPromise = import("../contracts/external_contracts");
 
 
 var web3 = new Web3(new providers.WebsocketProvider("wss://rinkeby.infura.io/ws/v3/3f99dbedb75345d2bbce395de75823b9"));
-const peopleFaucetAddress = "";
+const peopleFaucetAddress = "0x9dc1ae7458269e65572ccA76B59Dd19eDc3F1416";
 
 var peopleFaucet;
 var userAccount = web3.eth.accounts[0]

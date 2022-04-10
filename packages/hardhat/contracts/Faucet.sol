@@ -56,6 +56,4 @@ contract Faucet is Ownable {
         owner.transfer(amount);
         emit WithdrawETH(_msgSender(), amount);
     }
-
-
 }

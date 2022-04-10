@@ -1013,7 +1013,7 @@ module.exports = {
         abi: ERC20ABI,
       },
       PEOPLE_FAUCET: {
-        address: "",
+        address: "0x9dc1ae7458269e65572ccA76B59Dd19eDc3F1416",
         abi: peopleFaucetABI
       }
     },

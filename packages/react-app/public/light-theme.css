@@ -23641,3 +23641,9 @@ div.ant-typography-edit-content.ant-typography-rtl {
 .highlight {
   background-color: #f9f9f9;
 }
+.step-container {
+  padding: 0 20px;
+}
+.steps-content {
+  margin-top: 20px;
+}

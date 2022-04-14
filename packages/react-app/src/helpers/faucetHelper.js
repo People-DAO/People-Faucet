@@ -9,24 +9,33 @@ const peopleFaucetAddress = "0x9dc1ae7458269e65572ccA76B59Dd19eDc3F1416";
 var peopleFaucet;
 
 export function startApp(web3, userAccount) {
-  externalContractsPromise.then(data => {
+  return externalContractsPromise.then(data => {
     var abi = data.default[1].contracts.PEOPLE_FAUCET.abi;
     var address = data.default[1].contracts.PEOPLE_FAUCET.address;
-    peopleFaucet = new web3.eth.Contract(
-      abi,
-      address
-    );
-    peopleFaucet.events.SendToken({ filter: { Receiver: userAccount } })
-      .on("data", function (event) {
-        let data = event.returnValues;
-        // do something
-      }).on('error', console.error);
-  })
-  var accountInterval = setInterval(function () {
-    if (web3.eth.accounts[0] !== userAccount) {
-      userAccount = web3.eth.accounts[0];
-    }
-  }, 100);
+    // const contractInstance = new ethers.Contract(address , abi , signerOrProvider);
+
+  });
+
+
+
+  // return externalContractsPromise.then(data => {
+  //   var abi = data.default[1].contracts.PEOPLE_FAUCET.abi;
+  //   var address = data.default[1].contracts.PEOPLE_FAUCET.address;
+  //   peopleFaucet = new web3.eth.Contract(
+  //     abi,
+  //     address
+  //   );
+  //   peopleFaucet.events.SendToken({ filter: { Receiver: userAccount } })
+  //     .on("data", function (event) {
+  //       let data = event.returnValues;
+  //       // do something
+  //     }).on('error', console.error);
+  // })
+  // var accountInterval = setInterval(function () {
+  //   if (web3.eth.accounts[0] !== userAccount) {
+  //     userAccount = web3.eth.accounts[0];
+  //   }
+  // }, 100);
 }
 
 export function getRequestedAddress(wallet_address) {

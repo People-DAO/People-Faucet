@@ -5,9 +5,7 @@ import {
 } from "eth-hooks";
 import React, { useCallback, useEffect, useState, useImperativeHandle } from "react";
 import SelectInput from "./SelectInput";
-import UserList from "./UserList";
 import { Steps, Button, message } from "antd";
-import {Account, NetworkSwitch} from "../components";
 import { Transactor, Web3ModalSetup } from "../helpers";
 import { useStaticJsonRPC } from "../hooks";
 import { NETWORKS, ALCHEMY_KEY } from "../constants";
@@ -144,7 +142,7 @@ function Home({ yourLocalBalance, readContracts, childrenRef }) {
   const doStep = () => {
     switch (current) {
       case 0:
-        // TODO: connect wallet
+        // connect wallet
         setAddress("0x9832794h98uad9da9832794h98uad9da");
         next();
         break;
@@ -187,10 +185,16 @@ function Home({ yourLocalBalance, readContracts, childrenRef }) {
               People-dao Authenticated Faucet
             </h1>
 
-            <SelectInput></SelectInput>
+            <SelectInput handleRequest={doStep}></SelectInput>
 
-            <UserList></UserList>
+            {/* <UserList></UserList> */}
           </div>
+        );
+      case 3:
+        return (
+          <h1>
+            Funds are on their way!
+          </h1>
         );
       default: 
         return <></>;

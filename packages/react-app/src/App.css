@@ -2,3 +2,9 @@
   text-align: center;
   padding-left: calc(100vw - 100%);
 }
+
+.select-after {
+  cursor: pointer;
+  background-color: #1890ff;
+  padding: 0;
+}

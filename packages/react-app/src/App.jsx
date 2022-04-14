@@ -1,5 +1,3 @@
-import Web3 from 'web3';
-import { Button, Col, Row } from "antd";
 import "antd/dist/antd.css";
 import {
   useBalance,
@@ -11,16 +9,12 @@ import {
 } from "eth-hooks";
 import { useExchangeEthPrice } from "eth-hooks/dapps/dex";
 import React, { useEffect, useState, useCallback, useRef } from "react";
-import { Route, Switch, useLocation } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import "./App.css";
 import {
-  Faucet,
-  GasGauge,
   Header,
-  Ramp,
   ThemeSwitch,
   Account,
-  FaucetHint
 } from "./components";
 import { NETWORKS, ALCHEMY_KEY } from "./constants";
 import externalContracts from "./contracts/external_contracts";
@@ -30,6 +24,7 @@ import { Transactor, Web3ModalSetup, FaucetHelper } from "./helpers";
 import { Home } from "./views";
 import { useStaticJsonRPC } from "./hooks";
 import { ethers } from "ethers";
+import * as CONTRACT from "./contracts/external_contracts";
 
 /*
     Welcome to 🏗 scaffold-eth !
@@ -214,7 +209,6 @@ function App(props) {
   ]);
 
   useEffect(() => {
-    console.log('injectedProvider: ', injectedProvider);
     if (injectedProvider) {
       childrenRef.current.goNext();
     }
@@ -222,17 +216,20 @@ function App(props) {
 
   const loadWeb3Modal = useCallback(async () => {
     const provider = await web3Modal.connect();
-    console.log('provider', provider);
-    setInjectedProvider(new ethers.providers.Web3Provider(provider));
+    const people_abi = CONTRACT[1].contracts.PEOPLE_FAUCET.abi;
+    const people_address = CONTRACT[1].contracts.PEOPLE_FAUCET.address;
+    const web3Provider = new ethers.providers.Web3Provider(provider);
+    const signer = web3Provider.getSigner();
+    setInjectedProvider(web3Provider);
 
     provider.on("chainChanged", chainId => {
       console.log(`chain changed to ${chainId}! updating providers`);
-      setInjectedProvider(new ethers.providers.Web3Provider(provider));
+      // setInjectedProvider(web3Provider);
     });
 
     provider.on("accountsChanged", () => {
       console.log(`account changed!`);
-      setInjectedProvider(new ethers.providers.Web3Provider(provider));
+      // setInjectedProvider(web3Provider);
     });
 
     // Subscribe to session disconnection
@@ -271,6 +268,7 @@ function App(props) {
         <div style={{ display: "flex", flex: 1, alignItems: "center" }}>
           <Account
             useBurner={USE_BURNER_WALLET}
+            minimized={true}
             address={address}
             localProvider={localProvider}
             userSigner={userSigner}
@@ -282,49 +280,6 @@ function App(props) {
             blockExplorer={blockExplorer}
           />
         </div>
-        {/* {yourLocalBalance.lte(ethers.BigNumber.from("0")) && (
-          <FaucetHint localProvider={localProvider} targetNetwork={targetNetwork} address={address} />
-        )} */}
-      </div>
-
-      {/* 🗺 Extra UI like gas price, eth price, faucet, and support: */}
-      <div style={{ position: "fixed", textAlign: "left", left: 0, bottom: 20, padding: 10 }}>
-        <Row align="middle" gutter={[4, 4]}>
-          <Col span={8}>
-            <Ramp price={price} address={address} networks={NETWORKS} />
-          </Col>
-
-          <Col span={8} style={{ textAlign: "center", opacity: 0.8 }}>
-            <GasGauge gasPrice={gasPrice} />
-          </Col>
-          <Col span={8} style={{ textAlign: "center", opacity: 1 }}>
-            <Button
-              onClick={() => {
-                window.open("https://t.me/joinchat/KByvmRe5wkR-8F_zz6AjpA");
-              }}
-              size="large"
-              shape="round"
-            >
-              <span style={{ marginRight: 8 }} role="img" aria-label="support">
-                💬
-              </span>
-              Support
-            </Button>
-          </Col>
-        </Row>
-
-        <Row align="middle" gutter={[4, 4]}>
-          <Col span={24}>
-            {
-              /*  if the local provider has a signer, let's show the faucet:  */
-              faucetAvailable ? (
-                <Faucet localProvider={localProvider} price={price} ensProvider={mainnetProvider} />
-              ) : (
-                ""
-              )
-            }
-          </Col>
-        </Row>
       </div>
     </div>
   );

@@ -18,7 +18,7 @@ import {
 } from "./components";
 import { NETWORKS, ALCHEMY_KEY } from "./constants";
 import externalContracts from "./contracts/external_contracts";
-// contracts
+
 import { Transactor, Web3ModalSetup, FaucetHelper } from "./helpers";
 import { Home } from "./views";
 import { useStaticJsonRPC } from "./hooks";

@@ -7,6 +7,7 @@ import { Web3ModalSetup } from "../helpers";
 function SelectInput({ handleRequest }) {
   const [contractInstance, setcontractInstance] = useState();
   const [btnDisable, setbtnDisable] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [address, setAddress] = useState('');
   const web3Modal = Web3ModalSetup();
 
@@ -15,7 +16,7 @@ function SelectInput({ handleRequest }) {
     const provider = await web3Modal.connect();
 
     const people_abi = CONTRACT[1].contracts.PEOPLE_FAUCET.abi;
-    const people_address = CONTRACT[1].contracts.PEOPLE_FAUCET.address;
+    const people_address = CONTRACT[1].contracts.PEOPLE_FAUCET.testAddress;
     const web3Provider = new ethers.providers.Web3Provider(provider);
     const signer = web3Provider.getSigner();
     const address = await signer.getAddress();
@@ -30,14 +31,14 @@ function SelectInput({ handleRequest }) {
   // 调用 requestTokens 获取
   const getToken = async () => {
     try {
+      setLoading(true);
       const ret = await contractInstance.requestTokens();
-      console.log('request: ', ret);
       const retwait = await ret.wait();
-      console.log('successful: ', retwait);
+      setLoading(false);
       handleRequest();
     } catch (e) {
-      message.error(e.reason);
-      console.log(Object.keys(e));
+      message.error(e.error.message || `Can't Request Multiple Times`);
+      setLoading(false);
       setbtnDisable(true);
     }
   }
@@ -49,7 +50,7 @@ function SelectInput({ handleRequest }) {
   return(
     <div>
       <div style={{fontSize: '16px', marginBottom: '30px'}}>Connected to: {address}</div>
-      <Button type="primary" disabled={btnDisable} onClick={requestToken}>Request Funds</Button>
+      <Button type="primary" disabled={btnDisable} onClick={requestToken} loading={loading}>Request Funds</Button>
     </div>
   )
 }

@@ -18,7 +18,7 @@ const UserList = () => {
     const web3Modal = Web3ModalSetup();
     const provider = await web3Modal.connect();
     const people_abi = CONTRACT[1].contracts.PEOPLE_FAUCET.abi;
-    const people_address = CONTRACT[1].contracts.PEOPLE_FAUCET.address;
+    const people_address = CONTRACT[1].contracts.PEOPLE_FAUCET.testAddress;
     const web3Provider = new ethers.providers.Web3Provider(provider);
     const signer = web3Provider.getSigner();
     const contractInstance = new ethers.Contract(people_address , people_abi , signer);

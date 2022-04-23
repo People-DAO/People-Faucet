@@ -14,7 +14,6 @@ const UserList = () => {
       return;
     }
     setLoading(true);
-    console.log('ret loadMoreData');
     const web3Modal = Web3ModalSetup();
     const provider = await web3Modal.connect();
     const people_abi = CONTRACT[1].contracts.PEOPLE_FAUCET.abi;

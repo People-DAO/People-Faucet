@@ -17,6 +17,8 @@ contract Faucet is Ownable {
         tokenContract = _tokenContract; // set token contract
     }
 
+    receive() external payable{}
+    
     event SendToken(address indexed Receiver, uint256 indexed Amount); 
     event WithdrawToken(address indexed sender, address indexed TokenContract, uint256 indexed Amount); 
     event WithdrawETH(address indexed sender, uint256 indexed Amount); 

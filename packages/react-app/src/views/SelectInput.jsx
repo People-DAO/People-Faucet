@@ -38,8 +38,7 @@ function SelectInput({ handleRequest }) {
       setLoading(false);
       handleRequest();
     } catch (e) {
-      console.log('error', e);
-      message.error(e.error?.message || e?.message || `Can't Request Multiple Times`);
+      message.error(e?.data?.message || e?.message || `Can't Request Multiple Times`);
       setLoading(false);
       setbtnDisable(true);
     }

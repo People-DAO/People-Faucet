@@ -9,7 +9,6 @@ import { Steps, Button, message } from "antd";
 import { Transactor, Web3ModalSetup } from "../helpers";
 import { useStaticJsonRPC } from "../hooks";
 import { NETWORKS, ALCHEMY_KEY } from "../constants";
-import { useExchangeEthPrice } from "eth-hooks/dapps/dex";
 
 const { Step } = Steps;
 
@@ -44,6 +43,10 @@ const providers = [
   "https://rpc.scaffoldeth.io:48544",
 ];
 
+const BscProviders = [
+  'https://bscrpc.com'
+];
+
 const initialNetwork = NETWORKS.localhost; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
 
 /**
@@ -55,13 +58,14 @@ const initialNetwork = NETWORKS.localhost; // <------- select your target fronte
 function Home({ yourLocalBalance, readContracts, childrenRef }) {
   // you can also use hooks locally in your component of choice
   // in this case, let's keep track of 'purpose' variable from our contract
-  const networkOptions = [initialNetwork.name, "mainnet", "rinkeby"];
+  const networkOptions = [initialNetwork.name, "mainnet", "rinkeby", 'bscMain'];
   const [injectedProvider, setInjectedProvider] = useState();
   const [current, setCurrent] = React.useState(0);
   const [address, setAddress] = React.useState("");
 
+  // todo support switch network
   const [selectedNetwork, setSelectedNetwork] = useState(networkOptions[0]);
-  const mainnetProvider = useStaticJsonRPC(providers);
+  const mainnetProvider = useStaticJsonRPC(BscProviders);
   const targetNetwork = NETWORKS[selectedNetwork];
 
   useImperativeHandle(childrenRef, () => ({
@@ -116,9 +120,6 @@ function Home({ yourLocalBalance, readContracts, childrenRef }) {
       loadWeb3Modal();
     }
   }, [loadWeb3Modal]);
-
-  /* 💵 This hook will get the price of ETH from 🦄 Uniswap: */
-  const price = useExchangeEthPrice(targetNetwork, mainnetProvider);
 
   // Use your injected provider from 🦊 Metamask or if you don't have it then instantly generate a 🔥 burner wallet.
   const userProviderAndSigner = useUserProviderAndSigner(injectedProvider, localProvider, USE_BURNER_WALLET);
@@ -196,7 +197,7 @@ function Home({ yourLocalBalance, readContracts, childrenRef }) {
             Funds are on their way!
           </h1>
         );
-      default: 
+      default:
         return <></>;
     }
   }

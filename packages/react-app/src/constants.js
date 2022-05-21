@@ -201,6 +201,13 @@ export const NETWORKS = {
     gasPrice: 1000000000,
     faucet: "https://faucet.fantom.network/",
   },
+  bscMain: {
+    name: "bscMain",
+    color: '#F3C756',
+    chainId: 56,
+    rpcUrl: 'https://bscrpc.com',
+    blockExplorer: 'https://bscscan.com/'
+  }
 };
 
 export const NETWORK = chainId => {

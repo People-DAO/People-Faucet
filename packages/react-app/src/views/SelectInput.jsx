@@ -16,7 +16,7 @@ function SelectInput({ handleRequest }) {
     const provider = await web3Modal.connect();
 
     const people_abi = CONTRACT[1].contracts.PEOPLE_FAUCET.abi;
-    const people_address = CONTRACT[1].contracts.PEOPLE_FAUCET.testAddress;
+    const people_address = CONTRACT[1].contracts.PEOPLE_FAUCET.address;
     const web3Provider = new ethers.providers.Web3Provider(provider);
     const signer = web3Provider.getSigner();
     const address = await signer.getAddress();
@@ -34,10 +34,12 @@ function SelectInput({ handleRequest }) {
       setLoading(true);
       const ret = await contractInstance.requestTokens();
       const retwait = await ret.wait();
+      console.log('retwait');
       setLoading(false);
       handleRequest();
     } catch (e) {
-      message.error(e.error.message || `Can't Request Multiple Times`);
+      console.log('error', e);
+      message.error(e.error?.message || e?.message || `Can't Request Multiple Times`);
       setLoading(false);
       setbtnDisable(true);
     }

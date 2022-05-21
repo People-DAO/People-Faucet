@@ -7,7 +7,6 @@ import {
   useOnBlock,
   useUserProviderAndSigner,
 } from "eth-hooks";
-import { useExchangeEthPrice } from "eth-hooks/dapps/dex";
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import { Route, Switch } from "react-router-dom";
 import "./App.css";
@@ -62,10 +61,14 @@ const providers = [
   "https://rpc.scaffoldeth.io:48544",
 ];
 
+const BscProviders = [
+  'https://bscrpc.com'
+];
+
 function App(props) {
   // specify all the chains your app is available on. Eg: ['localhost', 'mainnet', ...otherNetworks ]
   // reference './constants.js' for other networks
-  const networkOptions = [initialNetwork.name, "mainnet", "rinkeby"];
+  const networkOptions = [initialNetwork.name, "mainnet", "rinkeby", "bscMain"];
 
   const [injectedProvider, setInjectedProvider] = useState();
   const [address, setAddress] = useState();
@@ -82,7 +85,7 @@ function App(props) {
   const localProvider = useStaticJsonRPC([
     process.env.REACT_APP_PROVIDER ? process.env.REACT_APP_PROVIDER : targetNetwork.rpcUrl,
   ]);
-  const mainnetProvider = useStaticJsonRPC(providers);
+  const mainnetProvider = useStaticJsonRPC(BscProviders);
 
   if (DEBUG) console.log(`Using ${selectedNetwork} network`);
 
@@ -98,9 +101,6 @@ function App(props) {
       window.location.reload();
     }, 1);
   };
-
-  /* 💵 This hook will get the price of ETH from 🦄 Uniswap: */
-  const price = useExchangeEthPrice(targetNetwork, mainnetProvider);
 
   /* 🔥 This hook will get the price of Gas from ⛽️ EtherGasStation */
   const gasPrice = useGasPrice(targetNetwork, "fast");
@@ -272,7 +272,6 @@ function App(props) {
             localProvider={localProvider}
             userSigner={userSigner}
             mainnetProvider={mainnetProvider}
-            price={price}
             web3Modal={web3Modal}
             loadWeb3Modal={loadWeb3Modal}
             logoutOfWeb3Modal={logoutOfWeb3Modal}

@@ -6,7 +6,7 @@ import Address from "./Address";
 import Balance from "./Balance";
 import Wallet from "./Wallet";
 
-/** 
+/**
   ~ What it does? ~
 
   Displays an Address, Balance, and Wallet as one Account component,
@@ -48,7 +48,6 @@ export default function Account({
   userSigner,
   localProvider,
   mainnetProvider,
-  price,
   minimized,
   web3Modal,
   loadWeb3Modal,
@@ -100,7 +99,6 @@ export default function Account({
       ) : isContract ? (
         <>
           {address && <Address address={address} ensProvider={mainnetProvider} blockExplorer={blockExplorer} />}
-          <Balance address={address} provider={localProvider} price={price} />
         </>
       ) : (
         ""

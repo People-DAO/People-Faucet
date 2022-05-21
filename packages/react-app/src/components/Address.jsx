@@ -8,7 +8,7 @@ import { useLookupAddress } from "eth-hooks/dapps/ens";
 
 const { Text } = Typography;
 
-/** 
+/**
   ~ What it does? ~
 
   Displays an address with a blockie image and option to copy address
@@ -52,9 +52,8 @@ export default function Address(props) {
 
   if (!address) {
     return (
-      <span>
-        <Skeleton avatar paragraph={{ rows: 1 }} />
-      </span>
+      <>
+      </>
     );
   }
 

@@ -1,4 +1,4 @@
-import { Skeleton, Typography } from "antd";
+import { Typography } from "antd";
 import React from "react";
 import { useThemeSwitcher } from "react-css-theme-switcher";
 import Blockies from "react-blockies";
